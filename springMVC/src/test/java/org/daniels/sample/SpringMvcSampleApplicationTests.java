@@ -1,4 +1,4 @@
-package org.daniel.sample;
+package org.daniels.sample;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
