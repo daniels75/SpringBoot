@@ -1,19 +1,12 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
-<!--Import Google Icon Font-->
-<link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
-<!--Import materialize.css-->
-<link type="text/css" rel="stylesheet" href="/webjars/materializecss/0.98.1/css/materialize.min.css"
-      media="screen,projection"/>
-
-<!--Let browser know website is optimized for mobile-->
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layout/default">
 <head>
-    <meta charset="UTF-8"/>
-    <title>Welcome in SpringBoot</title>
+    <title>Tweets</title>
 </head>
 <body>
-<div class="row">
+<div class="row" layout:fragment="content">
     <h2 class="indigo-text center" th:text="|Search results ${search} |">Tweets</h2>
     <ul class="collection">
         <li class="collection-item avatar" th:each="tweet : ${tweets}">
@@ -23,8 +16,5 @@
         </li>
     </ul>
 </div>
-<!--Import jQuery before materialize.js-->
-<script type="text/javascript" src="/webjars/jquery/3.2.0/jquery.min.js"></script>
-<script type="text/javascript" src="/webjars/materializecss/0.98.1/js/materialize.min.js"></script>
 </body>
 </html>
