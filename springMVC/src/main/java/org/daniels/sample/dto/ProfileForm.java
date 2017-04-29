@@ -1,7 +1,11 @@
 package org.daniels.sample.dto;
 
 import com.google.common.collect.Lists;
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotEmpty;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -10,9 +14,14 @@ import java.util.List;
  */
 public class ProfileForm {
 
+    @Size(min = 2)
     private String twitterHandle;
+    @Email
+    @NotEmpty
     private String email;
+    @NotNull
     private LocalDate birthDate;
+    @NotEmpty
     private List<String> tastes = Lists.newArrayList();
 
     public String getTwitterHandle() {
