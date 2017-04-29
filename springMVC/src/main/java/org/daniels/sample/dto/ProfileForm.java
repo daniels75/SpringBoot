@@ -1,6 +1,7 @@
 package org.daniels.sample.dto;
 
 import com.google.common.collect.Lists;
+import org.daniels.sample.validator.PastLocalDate;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -16,11 +17,15 @@ public class ProfileForm {
 
     @Size(min = 2)
     private String twitterHandle;
+
     @Email
     @NotEmpty
     private String email;
+
     @NotNull
+    @PastLocalDate
     private LocalDate birthDate;
+
     @NotEmpty
     private List<String> tastes = Lists.newArrayList();
 
