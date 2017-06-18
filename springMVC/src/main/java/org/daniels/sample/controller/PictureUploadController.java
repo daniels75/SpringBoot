@@ -21,6 +21,7 @@ import java.io.*;
 import java.net.URLConnection;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Locale;
 
 /**
  * Created by daniels on 05.05.2017.
@@ -80,18 +81,17 @@ public class PictureUploadController {
         return anonymousPicture;
     }
 
-    @RequestMapping("uploadError")
-    public ModelAndView onUploadError(HttpServletRequest request) {
+    @ExceptionHandler(IOException.class)
+    public ModelAndView handleIOException(Locale locale) {
         ModelAndView modelAndView = new ModelAndView("profile/uploadPage");
-        modelAndView.addObject("error", request.getAttribute(WebUtils.ERROR_MESSAGE_ATTRIBUTE));
+        modelAndView.addObject("error", messageSource.getMessage("upload.io.exception", null, locale));
         return modelAndView;
     }
 
-
-    @ExceptionHandler(IOException.class)
-    public ModelAndView handleIOException(IOException exception) {
+    @RequestMapping("uploadError")
+    public ModelAndView onUploadError(Locale locale) {
         ModelAndView modelAndView = new ModelAndView("profile/uploadPage");
-        modelAndView.addObject("error", exception.getMessage());
+        modelAndView.addObject("error", messageSource.getMessage("upload.file.too.big", null, locale));
         return modelAndView;
     }
 
