@@ -1,26 +1,43 @@
 package org.daniels.sample.controller;
 
 import org.apache.tomcat.util.http.fileupload.IOUtils;
+import org.daniels.sample.configuration.PictureUploadProperties;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.boot.autoconfigure.web.MultipartProperties;
+import org.springframework.context.MessageSource;
 import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.PathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.util.WebUtils;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.net.URLConnection;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 /**
  * Created by daniels on 05.05.2017.
  */
 @Controller
+@SessionAttributes("picturePath")
 public class PictureUploadController {
-    public static final Resource PICTURE_DIR = new FileSystemResource("./pictures");
 
+    private final Resource pictureDir;
+    private final Resource anonymousPicture;
+    private final MessageSource messageSource;
+
+    public PictureUploadController(PictureUploadProperties uploadProperties, MessageSource messageSource) {
+        this.pictureDir = uploadProperties.getUploadPath();
+        this.anonymousPicture = uploadProperties.getAnonymousPicture();
+        this.messageSource = messageSource;
+    }
 
     @RequestMapping("upload")
     public String uploadPage() {
@@ -28,18 +45,27 @@ public class PictureUploadController {
     }
 
     @RequestMapping(value = "/upload", method = RequestMethod.POST)
-    public String onUpload(@RequestParam  MultipartFile file, RedirectAttributes redirectAttributes) throws IOException {
+    public String onUpload(@RequestParam  MultipartFile file, RedirectAttributes redirectAttributes, Model model) throws IOException {
         if (file.isEmpty() || !isImage(file)) {
             redirectAttributes.addFlashAttribute("error", "Please load an image file");
             return "redirect:/upload";
         }
-        copyFileToPicture(file);
+        Resource picturePath = copyFileToPicture(file);
+        model.addAttribute("picturePath", picturePath);
         return "profile/uploadPage";
+    }
+
+
+    @RequestMapping(value = "/uploadedPicture")
+    public void getUploadedPicture(HttpServletResponse response, @ModelAttribute("picturePath") Resource picturePath) throws IOException {
+
+        response.setHeader("Content-Type", URLConnection.guessContentTypeFromName(picturePath.getFilename()));
+        IOUtils.copy(picturePath.getInputStream(), response.getOutputStream());
     }
 
     private Resource copyFileToPicture(@RequestParam MultipartFile file) throws IOException {
         String fileExtension = getFileExtension(file.getOriginalFilename());
-        File tempFile = File.createTempFile("pic", getFileExtension(fileExtension), PICTURE_DIR.getFile());
+        File tempFile = File.createTempFile("pic", fileExtension, pictureDir.getFile());
         try (InputStream inputStream = file.getInputStream(); OutputStream outputStream = new FileOutputStream(tempFile)) {
             {
                 IOUtils.copy(inputStream, outputStream);
@@ -47,6 +73,26 @@ public class PictureUploadController {
 
         }
         return new FileSystemResource(tempFile);
+    }
+
+    @ModelAttribute("picturePath")
+    public Resource picturePath() {
+        return anonymousPicture;
+    }
+
+    @RequestMapping("uploadError")
+    public ModelAndView onUploadError(HttpServletRequest request) {
+        ModelAndView modelAndView = new ModelAndView("profile/uploadPage");
+        modelAndView.addObject("error", request.getAttribute(WebUtils.ERROR_MESSAGE_ATTRIBUTE));
+        return modelAndView;
+    }
+
+
+    @ExceptionHandler(IOException.class)
+    public ModelAndView handleIOException(IOException exception) {
+        ModelAndView modelAndView = new ModelAndView("profile/uploadPage");
+        modelAndView.addObject("error", exception.getMessage());
+        return modelAndView;
     }
 
     @NotNull
