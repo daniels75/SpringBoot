@@ -1,0 +1,5 @@
+uplodad
+http://localhost:8080/upload
+
+profile
+http://localhost:8080/profile
