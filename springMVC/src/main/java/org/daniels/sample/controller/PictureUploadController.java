@@ -2,6 +2,7 @@ package org.daniels.sample.controller;
 
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.daniels.sample.configuration.PictureUploadProperties;
+import org.daniels.sample.profile.UserProfileSession;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.context.MessageSource;
 import org.springframework.core.io.FileSystemResource;
@@ -33,35 +34,35 @@ public class PictureUploadController {
     private final Resource pictureDir;
     private final Resource anonymousPicture;
     private final MessageSource messageSource;
+    private final UserProfileSession userProfileSession;
 
-    public PictureUploadController(PictureUploadProperties uploadProperties, MessageSource messageSource) {
+    public PictureUploadController(PictureUploadProperties uploadProperties, MessageSource messageSource, UserProfileSession userProfileSession) {
         this.pictureDir = uploadProperties.getUploadPath();
         this.anonymousPicture = uploadProperties.getAnonymousPicture();
         this.messageSource = messageSource;
+        this.userProfileSession = userProfileSession;
     }
 
-    @RequestMapping("upload")
-    public String uploadPage() {
-        return "profile/uploadPage";
+    @RequestMapping(value = "/uploadedPicture")
+    public void getUploadedPicture(HttpServletResponse response) throws IOException {
+        Resource picturePath = userProfileSession.getPicturePath();
+        if (picturePath == null) {
+            picturePath = anonymousPicture;
+        }
+        response.setHeader("Content-Type", URLConnection.guessContentTypeFromName(picturePath.getFilename()));
+        IOUtils.copy(picturePath.getInputStream(), response.getOutputStream());
     }
 
-    @RequestMapping(value = "/upload", method = RequestMethod.POST)
+    @RequestMapping(value = "/profile", params = {"upload"}, method = RequestMethod.POST)
     public String onUpload(@RequestParam  MultipartFile file, RedirectAttributes redirectAttributes, Model model) throws IOException {
         if (file.isEmpty() || !isImage(file)) {
             redirectAttributes.addFlashAttribute("error", "Please load an image file");
-            return "redirect:/upload";
+            return "redirect:/profile";
         }
         Resource picturePath = copyFileToPicture(file);
-        model.addAttribute("picturePath", picturePath);
-        return "profile/uploadPage";
-    }
+        userProfileSession.setPicturePath(picturePath);
 
-
-    @RequestMapping(value = "/uploadedPicture")
-    public void getUploadedPicture(HttpServletResponse response, @ModelAttribute("picturePath") Resource picturePath) throws IOException {
-
-        response.setHeader("Content-Type", URLConnection.guessContentTypeFromName(picturePath.getFilename()));
-        IOUtils.copy(picturePath.getInputStream(), response.getOutputStream());
+        return "redirect:profile";
     }
 
     private Resource copyFileToPicture(@RequestParam MultipartFile file) throws IOException {
@@ -76,15 +77,13 @@ public class PictureUploadController {
         return new FileSystemResource(tempFile);
     }
 
-    @ModelAttribute("picturePath")
-    public Resource picturePath() {
-        return anonymousPicture;
-    }
+
 
     @ExceptionHandler(IOException.class)
     public ModelAndView handleIOException(Locale locale) {
         ModelAndView modelAndView = new ModelAndView("profile/uploadPage");
         modelAndView.addObject("error", messageSource.getMessage("upload.io.exception", null, locale));
+        modelAndView.addObject("profileForm", userProfileSession.toForm());
         return modelAndView;
     }
 
@@ -92,6 +91,7 @@ public class PictureUploadController {
     public ModelAndView onUploadError(Locale locale) {
         ModelAndView modelAndView = new ModelAndView("profile/uploadPage");
         modelAndView.addObject("error", messageSource.getMessage("upload.file.too.big", null, locale));
+        modelAndView.addObject("profileForm", userProfileSession.toForm());
         return modelAndView;
     }
 
