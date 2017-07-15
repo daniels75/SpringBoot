@@ -3,3 +3,6 @@ http://localhost:8080/upload
 
 profile
 http://localhost:8080/profile
+
+search
+http://localhost:8080/search/mixed;keywords=spring,java
