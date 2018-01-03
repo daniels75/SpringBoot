@@ -1,5 +1,6 @@
 package org.daniels.sample.controller;
 
+import org.daniels.sample.org.daniels.sample.search.LightTweet;
 import org.daniels.sample.service.SearchService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.social.twitter.api.SearchParameters;
@@ -26,7 +27,7 @@ public class SearchController {
 
     @RequestMapping("/search/{searchType}")
     public ModelAndView search(@PathVariable String searchType, @MatrixVariable List<String> keywords) {
-        List<Tweet> tweets = searchService.search(searchType, keywords);
+        List<LightTweet> tweets = searchService.search(searchType, keywords);
         ModelAndView modelAndView = new ModelAndView("resultPage");
         modelAndView.addObject("tweets", tweets);
         modelAndView.addObject("search", String.join(",", keywords));

@@ -3,7 +3,6 @@ package org.daniels.sample.controller;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.daniels.sample.configuration.PictureUploadProperties;
 import org.daniels.sample.profile.UserProfileSession;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.context.MessageSource;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.PathResource;
@@ -18,6 +17,7 @@ import org.springframework.web.util.WebUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.constraints.NotNull;
 import java.io.*;
 import java.net.URLConnection;
 import java.nio.file.Files;

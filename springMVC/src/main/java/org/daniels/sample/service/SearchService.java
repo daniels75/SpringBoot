@@ -1,5 +1,6 @@
 package org.daniels.sample.service;
 
+import org.daniels.sample.org.daniels.sample.search.LightTweet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.social.twitter.api.SearchParameters;
 import org.springframework.social.twitter.api.Tweet;
@@ -20,14 +21,16 @@ public class SearchService {
     public SearchService(Twitter twitter){
         this.twitter = twitter;
     }
-    public List<Tweet>  search(String searchType, List<String> keywords) {
+
+    public List<LightTweet>  search(String searchType, List<String> keywords) {
         List<SearchParameters> searches = keywords.stream()
                 .map(taste -> createSearchParam(searchType, taste))
                 .collect(Collectors.toList());
 
-        List<Tweet> results = searches.stream()
+        List<LightTweet> results = searches.stream()
                 .map(params -> twitter.searchOperations().search(params))
                 .flatMap(searchResults -> searchResults.getTweets().stream())
+                .map(LightTweet::ofTweet)
                 .collect(Collectors.toList());
         return results;
     }
