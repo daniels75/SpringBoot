@@ -1,5 +1,6 @@
 package org.daniels.sample.user.api;
 
+import org.daniels.sample.error.EntityNotFoundException;
 import org.daniels.sample.user.User;
 import org.daniels.sample.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import java.util.List;
 /**
  * Created by daniels on 03.01.2018.
  */
+
 @RestController
 @RequestMapping("/api")
 public class UserApiController {
@@ -34,26 +36,19 @@ public class UserApiController {
         if (!userRepository.exists(user.getEmail())) {
             status = HttpStatus.CREATED;
         }
-        User savedUser = userRepository.save(user);
-        return new ResponseEntity<>(savedUser, status);
+        User saved = userRepository.save(user);
+        return new ResponseEntity<>(saved, status);
     }
 
-    @RequestMapping(value =  "/users/{email}", method = RequestMethod.PUT)
-    public ResponseEntity<User> updateUser(@PathVariable String email, @RequestBody User user) {
-        if (!userRepository.exists(user.getEmail())) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        User savedUser = userRepository.save(email, user);
-        return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
+    @RequestMapping(value = "/users/{email}", method = RequestMethod.PUT)
+    public ResponseEntity<User> updateUser(@PathVariable String email, @RequestBody User user) throws EntityNotFoundException {
+        User saved = userRepository.update(email, user);
+        return new ResponseEntity<>(saved, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/users/{email}", method = RequestMethod.DELETE)
-    public ResponseEntity<User> deleteUser(@PathVariable String email){
-        if (!userRepository.exists(email)) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+    public ResponseEntity<User> deleteUser(@PathVariable String email) throws EntityNotFoundException {
         userRepository.delete(email);
         return new ResponseEntity<>(HttpStatus.OK);
     }
-
 }
