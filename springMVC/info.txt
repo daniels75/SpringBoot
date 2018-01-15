@@ -9,3 +9,24 @@ http://localhost:8080/search/mixed;keywords=spring,java
 
 search api - REST
 http://localhost:8080/api/search/keywords=springFramework
+
+Users REST
+Url: http://localhost:8080
+Method: POST
+Content:
+   {
+     "twitterHandle": "test1",
+     "email": "dels11@o2.pl",
+     "birthDate": null,
+     "tastes": ["tst1", "tst2"]
+   }
+----
+Headers:
+Content-Type: application/json
+----
+Url: http://localhost:8080/api/users
+Method: GET
+----
+Url: http://localhost:8080/api/user/dels@o2.pl
+Method: DELETE
+----
