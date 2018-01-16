@@ -30,3 +30,5 @@ Method: GET
 Url: http://localhost:8080/api/user/dels@o2.pl
 Method: DELETE
 ----
+Swagger: http://localhost:8080/swagger-ui.html
+-----

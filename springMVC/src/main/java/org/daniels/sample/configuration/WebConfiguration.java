@@ -21,6 +21,12 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 import org.springframework.web.util.UrlPathHelper;
+import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spring.web.plugins.Docket;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
+//import springfox.documentation.spi.DocumentationType;
+//import springfox.documentation.spring.web.plugins.Docket;
+//import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import java.time.LocalDate;
 
@@ -28,6 +34,7 @@ import java.time.LocalDate;
  * Created by daniels on 26.04.2017.
  */
 @Configuration
+@EnableSwagger2
 public class WebConfiguration extends WebMvcConfigurerAdapter {
 
     // changing default mapper for DateTime
@@ -83,4 +90,15 @@ public class WebConfiguration extends WebMvcConfigurerAdapter {
         // dots are allowed - for REST purpose
         configurer.setUseRegisteredSuffixPatternMatch(true);
     }
+
+    @Bean
+    public Docket userApi() {
+        // the api documentation is available at http://localhost:8080/swagger-ui.html
+        return new Docket(DocumentationType.SWAGGER_2)
+                .select()
+                .paths(path -> path.startsWith("/api/"))
+                .build();
+    }
+
+
 }
