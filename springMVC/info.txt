@@ -8,7 +8,7 @@ search
 http://localhost:8080/search/mixed;keywords=spring,java
 
 search api - REST
-http://localhost:8080/api/search/keywords=springFramework
+http://localhost:8080/api/search/mixed;keywords=spring,java
 
 Users REST
 Url: http://localhost:8080
@@ -25,6 +25,7 @@ Headers:
 Content-Type: application/json
 ----
 Url: http://localhost:8080/api/users
+http://localhost:8080/api/users.json
 Method: GET
 ----
 Url: http://localhost:8080/api/user/dels@o2.pl
