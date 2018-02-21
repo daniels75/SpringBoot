@@ -17,7 +17,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api")
-@Secured("ROLE_ADMIN")
+//@Secured("ROLE_ADMIN")
 public class UserApiController {
 
     private UserRepository userRepository;
