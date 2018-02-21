@@ -33,3 +33,8 @@ Method: DELETE
 ----
 Swagger: http://localhost:8080/swagger-ui.html
 -----
+
+Authentication
+in the ARC or Postman use have to use following headers:
+Content-Type: application/json
+authorization: Basic YWRtaW46YWRtaWx4=
