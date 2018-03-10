@@ -35,11 +35,11 @@ Swagger: http://localhost:8080/swagger-ui.html
 -----
 
 Authentication
-in the ARC or Postman use have to use following headers:
+in the ARC or Postman we have to use following headers:
 Content-Type: application/json
 authorization: Basic YWRtaW46YWRtaW4=
 Authorization
-user passwd: dXNlcjp1c2Vy
-admin passwd: YWRtaW46YWRtaW4=
+user passwd: Basic dXNlcjp1c2Vy
+admin passwd:  Basic YWRtaW46YWRtaW4=
 
 --------------------------------
