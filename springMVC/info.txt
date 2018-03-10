@@ -33,7 +33,8 @@ Method: DELETE
 ----
 Swagger: http://localhost:8080/swagger-ui.html
 -----
-
+Twitter account for authentication: https://apps.twitter.com/app/13669050/show
+-----
 Authentication
 in the ARC or Postman we have to use following headers:
 Content-Type: application/json

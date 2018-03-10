@@ -1,4 +1,4 @@
-package org.daniels.sample.controller;
+package org.daniels.sample.authentication;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
