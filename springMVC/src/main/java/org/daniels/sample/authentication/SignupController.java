@@ -2,6 +2,7 @@ package org.daniels.sample.authentication;
 
 /**
  * Created by daniels on 10.03.2018.
+ * Handler for users that first time visit a page
  */
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.social.connect.Connection;

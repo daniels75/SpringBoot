@@ -11,6 +11,15 @@ import org.springframework.social.connect.web.SignInAdapter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.NativeWebRequest;
 
+/**
+ * SingInAdapter allows authenticate with Spring Security.
+ * Here user is authenticated by Twitter with OAuth1 service.
+ * This is a bridge between ProviderSignInController and signIn-provider,
+ * it is called in the end from OAuth1 callback when user is finally authentication by
+ * external service, here Twitter.
+ * SecurityContextHolder is need to store authenticated user in the application context.
+ * If user is NOT saved in the UsersConnectionRepository then Sing-Up method is called first.
+ */
 @Component
 public class AuthenticatingSignInAdapter implements SignInAdapter {
 

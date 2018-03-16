@@ -44,3 +44,7 @@ user passwd: Basic dXNlcjp1c2Vy
 admin passwd:  Basic YWRtaW46YWRtaW4=
 
 --------------------------------
+Here we have 2 way of login
+- first standard via /login action
+- second via /signin controller please see ProviderSisngInController
+
