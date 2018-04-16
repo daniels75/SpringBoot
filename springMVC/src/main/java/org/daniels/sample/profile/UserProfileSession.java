@@ -23,14 +23,14 @@ public class UserProfileSession implements Serializable {
 
     private String twitterHandle;
     private String email;
-    private LocalDate birithDate;
+    private LocalDate birthDate;
     private List<String> tastes = Lists.newArrayList();
     private URL picturePath;
 
     public void saveForm(ProfileForm profileForm) {
         this.twitterHandle = profileForm.getTwitterHandle();
         this.email = profileForm.getEmail();
-        this.birithDate = profileForm.getBirthDate();
+        this.birthDate = profileForm.getBirthDate();
         this.tastes = profileForm.getTastes();
     }
 
@@ -38,7 +38,7 @@ public class UserProfileSession implements Serializable {
         ProfileForm profileForm = new ProfileForm();
         profileForm.setTwitterHandle(twitterHandle);
         profileForm.setEmail(email);
-        profileForm.setBirthDate(birithDate);
+        profileForm.setBirthDate(birthDate);
         profileForm.setTastes(tastes);
         return profileForm;
     }

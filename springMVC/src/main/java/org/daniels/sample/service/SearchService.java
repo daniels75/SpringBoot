@@ -1,9 +1,9 @@
 package org.daniels.sample.service;
 
 import org.daniels.sample.org.daniels.sample.search.LightTweet;
+import org.daniels.sample.org.daniels.sample.search.TwitterSearch;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.social.twitter.api.SearchParameters;
-import org.springframework.social.twitter.api.Tweet;
 import org.springframework.social.twitter.api.Twitter;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
  * Created by daniels on 10.07.2017.
  */
 @Service
-public class SearchService {
+public class SearchService implements TwitterSearch{
     private Twitter twitter;
 
     @Autowired

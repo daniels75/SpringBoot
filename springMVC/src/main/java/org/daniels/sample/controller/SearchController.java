@@ -1,10 +1,9 @@
 package org.daniels.sample.controller;
 
 import org.daniels.sample.org.daniels.sample.search.LightTweet;
-import org.daniels.sample.service.SearchService;
+import org.daniels.sample.org.daniels.sample.search.TwitterSearch;
+import org.daniels.sample.profile.UserProfileSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.social.twitter.api.SearchParameters;
-import org.springframework.social.twitter.api.Tweet;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.MatrixVariable;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,16 +17,19 @@ import java.util.List;
  */
 @Controller
 public class SearchController {
-    private SearchService searchService;
+    private TwitterSearch twitterSearch;
 
     @Autowired
-    public SearchController(SearchService searchService){
-        this.searchService = searchService;
+    private UserProfileSession session;
+
+    @Autowired
+    public SearchController(TwitterSearch  twitterSearch){
+        this.twitterSearch = twitterSearch;
     }
 
     @RequestMapping("/search/{searchType}")
     public ModelAndView search(@PathVariable String searchType, @MatrixVariable List<String> keywords) {
-        List<LightTweet> tweets = searchService.search(searchType, keywords);
+        List<LightTweet> tweets = twitterSearch.search(searchType, keywords);
         ModelAndView modelAndView = new ModelAndView("resultPage");
         modelAndView.addObject("tweets", tweets);
         modelAndView.addObject("search", String.join(",", keywords));
